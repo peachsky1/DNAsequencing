@@ -36,10 +36,15 @@ def reverseComplement(s):
 
 def readGenome(filename):
     genome = ''
+
+    # >gi|9626243|ref|NC_001416.1| Enterobacteria phage lambda, complete genome
+    # GGGCGGCGACCTCGCGGGTTTTCGCTATTTATGAAAATTTTCCGGTTTAAGGCGTTTCCGTTCTTCTTCG
+    # TCATAACTTAATGTTTTTATTTAAAATACCCTCTGAAAAGAAAGGAAACGACAGGTGCTGAAAGCGAGGC
     with open(filename, 'r') as f:
         for line in f:
             # ignore header line with genome information
             if not line[0] == '>':
+                #rstrip removes trailing white space from the ends of the string. in this case it will trip off the new line at the end
                 genome += line.rstrip()
     return genome
 
@@ -78,7 +83,15 @@ def main():
     print(filename)
     genome = readGenome('lambda_virus.fa')
     print(genome[:100])
-
+    print(len(genome))
+    counts = {'A':0, 'T':0, 'G':0,'C':0}
+    for base in genome:
+        counts[base]+=1
+    print(counts)
+    # {'A': 12334, 'T': 11986, 'G': 12820, 'C': 11362}
+    import collections
+    cc = collections.Counter(genome)
+    print(cc)
 
 if __name__ == '__main__':
     main()
