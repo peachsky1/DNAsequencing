@@ -42,6 +42,23 @@ def createHist(qualities):
     return hist
 
 
+
+def findGCByPos(reads):
+	gc = [0]*100
+	tot = [0]*100
+	for r in reads:
+		for i in range(len(r)):
+			if r[i] =='C' or r[i] == 'G':
+				gc[i]+=1
+			tot[i]+=1
+	for i in range(len(gc)):
+		if tot[i] !=0:
+			gc[i] /= float(tot[i])
+	return gc
+		
+		
+		
+
 def main():
     url = "http://d28rh4a8wq0iu5.cloudfront.net/ads1/data/SRR835775_1.first1000.fastq"
     # downloadFile(url)
@@ -56,6 +73,9 @@ def main():
     plt.bar(range(len(lst)),lst)
     plt.show()
 
+    gc = findGCByPos(seqs)
+	plt.plot(range(len(gc)),gc)
+	plt.show()
 
 
 
