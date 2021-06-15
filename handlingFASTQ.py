@@ -1,6 +1,9 @@
 import math
 import wget
 import matplotlib.pyplot as plt
+import collections
+
+
 # import numpy as np
 def downloadFile(url):
     filename = wget.download(url)
@@ -76,6 +79,13 @@ def main():
     gc = findGCByPos(seqs)
 	plt.plot(range(len(gc)),gc)
 	plt.show()
+	
+	gcCount = collections.Counter()
+	for seq in seqs:
+		gcCount.update(seq)
+	print(gcCount)
+# 	Counter({'G': 28742, 'C': 28272, 'T': 21836, 'A': 21132, 'N': 18})
+	
 
 
 
