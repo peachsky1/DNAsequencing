@@ -13,6 +13,29 @@ import collections
 import random
 
 
+def reverseComplement(s):
+    complement = {'A': 'T', 'C': 'G', 'G': 'C', 'T': 'A', 'N':'N'}
+    t = ''
+    for base in s:
+        t = complement[base] + t
+    return t
+
+def readFastq(filename):
+    sequence = []
+    qualities = []
+    with open(filename) as filehandle:
+        while True:
+            filehandle.readline()
+            seq = filehandle.readline().rstrip()
+            filehandle.readline()
+            qual = filehandle.readline().rstrip()
+            if len(seq) == 0:
+                break
+            sequence.append(seq)
+            qualities.append(qual)
+    return sequence, qualities
+
+
 # generate random genome using random 
 def generateReads(genome, numReads, readLen):
 	reads = []
@@ -79,10 +102,75 @@ def main():
 		if len(matches) > 0:
 			numMatched += 1
 	
+	url = "http://d28rh4a8wq0iu5.cloudfront.net/ads1/data/ERR266411_1.first1000.fastq"
+# 	downloadFile(url)
+	filename = "ERR266411_1.first1000.fastq"
 	
+	phix_reads, _ = readFastq(filename)
+	numMatched = 0
+	n = 0
+	for r in phix_reads:
+# 		possible sequencing error might be contains. use only 30 bases per read
+		r = r[:30]
+		matches = naive(r, genome)
+		if len(matches) > 0:
+			numMatched +=1
+# 	numMatched
+# Out[47]: 476
+# Why this is less than half? 2 possible reasons
+# 1. sequencing error.
+# 2. genome is double stranded. check the reverse complement.
 	
+	numMatched = 0
+	n = 0
+	for r in phix_reads:
+# 		possible sequencing error might be contains. use only 30 bases per read
+		r = r[:30]
+		matches = naive(r, genome)
+# 		add reverse matches
+		matches.extend(naive(reverseComplement(r),genome))
+		if len(matches) > 0:
+			numMatched +=1
+	
+# 	numMatched
+# Out[53]: 932
+# Good improvement!
 if __name__ == '__main__':
 	main()
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	
